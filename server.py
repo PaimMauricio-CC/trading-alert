@@ -3,6 +3,8 @@ import logging
 import os
 import smtplib
 from email.mime.text import MIMEText
+=======
+
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -11,6 +13,7 @@ logging.basicConfig(level=logging.INFO)
 def webhook():
     data = request.json
     app.logger.info('Received webhook: %s', data)
+
     send_email('TradingView Alert', str(data))
     return jsonify({'status': 'received'}), 200
 
@@ -35,6 +38,8 @@ def send_email(subject: str, body: str) -> None:
             smtp.send_message(msg)
     except Exception as e:
         app.logger.error('Failed to send email: %s', e)
+
+    return jsonify({'status': 'received'}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
