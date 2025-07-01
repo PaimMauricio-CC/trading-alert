@@ -37,8 +37,12 @@ Use an [App Password](https://support.google.com/accounts/answer/185833) for `GM
 
 ### Member Area
 
-`exemplo.py` provides a very small front-end where you can log in and view the
-alerts saved in `alerts.json`.
+`exemplo.py` provides a small member area where you can register, log in and
+view the alerts saved in `alerts.json`.
+
+Set the `DATABASE_URL` environment variable with the connection string for your
+PostgreSQL database before running. Tables are created automatically on the
+first request.
 
 Run it separately:
 
@@ -46,6 +50,25 @@ Run it separately:
 python exemplo.py
 ```
 
-Login credentials default to `admin`/`password` but can be configured with the
-environment variables `APP_USER` and `APP_PASS`.  Set `SECRET_KEY` to control the
-Flask session secret.
+Set `SECRET_KEY` to control the Flask session secret.
+
+#### PostgreSQL Setup
+
+1. Abra o `psql` e crie o banco manualmente:
+
+```sql
+CREATE DATABASE trading_alert;
+```
+
+2. Configure a variável `DATABASE_URL` apontando para o banco criado:
+
+```bash
+export DATABASE_URL="postgresql://usuario:senha@localhost/trading_alert"
+```
+
+3. Inicie as tabelas executando:
+
+```bash
+flask --app exemplo.py init-db
+```
+
