@@ -1,6 +1,5 @@
 from flask import Flask, request, redirect, render_template_string, session, url_for
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, User
 import json
 import os
 
@@ -9,18 +8,7 @@ app.secret_key = os.getenv('SECRET_KEY', 'secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-
-    def set_password(self, password: str) -> None:
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password: str) -> bool:
-        return check_password_hash(self.password_hash, password)
+db.init_app(app)
 
 ALERT_FILE = os.path.join(os.path.dirname(__file__), 'alerts.json')
 
@@ -175,8 +163,15 @@ def assets():
     return render_template_string(ASSETS_TEMPLATE, alerts=alerts)
 
 @app.before_first_request
-def init_db():
+def create_tables():
     db.create_all()
+
+@app.cli.command('init-db')
+def init_db_command():
+    """Create all database tables."""
+    with app.app_context():
+        db.create_all()
+    print('Database initialized')
 
 if __name__ == '__main__':
     app.run(port=8000)
