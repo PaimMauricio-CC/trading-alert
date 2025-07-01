@@ -1,4 +1,6 @@
 from flask import Flask, request, redirect, render_template_string, session, url_for
+
+from models import db, User
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
@@ -9,6 +11,8 @@ app.secret_key = os.getenv('SECRET_KEY', 'secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
+db.init_app(app)
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -175,6 +179,16 @@ def assets():
     return render_template_string(ASSETS_TEMPLATE, alerts=alerts)
 
 @app.before_first_request
+def create_tables():
+    db.create_all()
+
+@app.cli.command('init-db')
+def init_db_command():
+    """Create all database tables."""
+    with app.app_context():
+        db.create_all()
+    print('Database initialized')
+
 def init_db():
     db.create_all()
 
