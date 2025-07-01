@@ -63,4 +63,4 @@ def _store_alert(alert: str) -> None:
         app.logger.error('Failed to store alert: %s', e)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=5000)

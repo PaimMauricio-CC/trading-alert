@@ -51,3 +51,24 @@ python exemplo.py
 ```
 
 Set `SECRET_KEY` to control the Flask session secret.
+
+#### PostgreSQL Setup
+
+1. Abra o `psql` e crie o banco manualmente:
+
+```sql
+CREATE DATABASE trading_alert;
+```
+
+2. Configure a variável `DATABASE_URL` apontando para o banco criado:
+
+```bash
+export DATABASE_URL="postgresql://usuario:senha@localhost/trading_alert"
+```
+
+3. Inicie as tabelas executando:
+
+```bash
+flask --app exemplo.py init-db
+```
+
