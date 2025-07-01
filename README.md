@@ -26,9 +26,9 @@ TradingView should send POST requests to `http://<server_ip>:5000/webhook` with 
 Set the following environment variables before running the server so it can send emails using Gmail:
 
 ```
-export GMAIL_USER="your@gmail.com"
-export GMAIL_PASS="app_password"
-export TO_EMAIL="destination@example.com"
+set GMAIL_USER="your@gmail.com"
+set GMAIL_PASS="app_password"
+set TO_EMAIL="destination@example.com"
 ```
 
 ##Use an [App Password](https://support.google.com/accounts/answer/185833) for `GMAIL_PASS` if you have two-factor authentication enabled.
