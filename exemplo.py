@@ -5,39 +5,77 @@ import os
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'secret')
 
-ALERT_FILE = os.path.join(os.path.dirname(__file__), 'alerts.json')
-
 # Simple credentials from env vars
 USER = os.getenv('APP_USER', 'admin')
 PASSWORD = os.getenv('APP_PASS', 'password')
 
+ALERT_FILE = os.path.join(os.path.dirname(__file__), 'alerts.json')
+
 LOGIN_TEMPLATE = """
 <!doctype html>
-<title>Login</title>
-{% if error %}<p style='color:red;'>{{ error }}</p>{% endif %}
-<form method=post>
-  <input type=text name=username placeholder=Username required>
-  <input type=password name=password placeholder=Password required>
-  <button type=submit>Login</button>
-</form>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <title>Login</title>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+</head>
+<body class='bg-light'>
+  <div class='container py-5'>
+    <div class='row justify-content-center'>
+      <div class='col-md-4'>
+        <div class='card shadow-sm'>
+          <div class='card-body'>
+            <h3 class='card-title mb-4 text-center'>Login</h3>
+            {% if error %}<div class='alert alert-danger'>{{ error }}</div>{% endif %}
+            <form method='post'>
+              <div class='mb-3'>
+                <input class='form-control' type='text' name='username' placeholder='Username' required>
+              </div>
+              <div class='mb-3'>
+                <input class='form-control' type='password' name='password' placeholder='Password' required>
+              </div>
+              <button class='btn btn-primary w-100' type='submit'>Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
 """
 
 ASSETS_TEMPLATE = """
 <!doctype html>
-<title>Ativos</title>
-<p>Logado como {{ session['user'] }} | <a href="{{ url_for('logout') }}">Sair</a></p>
-<ul>
-{% for alert in alerts %}
-  <li>{{ alert }}</li>
-{% endfor %}
-</ul>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <title>Ativos</title>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+</head>
+<body class='bg-light'>
+  <div class='container py-4'>
+    <div class='d-flex justify-content-end mb-3'>
+      <span class='me-2'>Logado como {{ session['user'] }}</span>
+      <a class='btn btn-sm btn-secondary' href="{{ url_for('logout') }}">Sair</a>
+    </div>
+    <ul class='list-group'>
+    {% for alert in alerts %}
+      <li class='list-group-item'>{{ alert }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>
 """
+
 
 @app.route('/')
 def index():
     if 'user' in session:
         return redirect(url_for('assets'))
     return redirect(url_for('login'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -68,6 +106,7 @@ def assets():
             except json.JSONDecodeError:
                 alerts = []
     return render_template_string(ASSETS_TEMPLATE, alerts=alerts)
+
 
 if __name__ == '__main__':
     app.run(port=8000)

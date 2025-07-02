@@ -37,8 +37,9 @@ Use an [App Password](https://support.google.com/accounts/answer/185833) for `GM
 
 ### Member Area
 
-`exemplo.py` provides a very small front-end where you can log in and view the
-alerts saved in `alerts.json`.
+`exemplo.py` provides a small member area where you can log in and view the
+alerts saved in `alerts.json`. Credentials default to `admin`/`password` but can
+be configured with the environment variables `APP_USER` and `APP_PASS`.
 
 Run it separately:
 
@@ -46,6 +47,5 @@ Run it separately:
 python exemplo.py
 ```
 
-Login credentials default to `admin`/`password` but can be configured with the
-environment variables `APP_USER` and `APP_PASS`.  Set `SECRET_KEY` to control the
-Flask session secret.
+Set `SECRET_KEY` to control the Flask session secret.
+
