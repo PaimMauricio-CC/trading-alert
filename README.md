@@ -37,8 +37,10 @@ Use an [App Password](https://support.google.com/accounts/answer/185833) for `GM
 
 ### Member Area
 
-`exemplo.py` provides a very small front-end where you can log in and view the
-alerts saved in `alerts.json`.
+`exemplo.py` provides a small member area where you can register and log in to
+view the alerts saved in `alerts.json`. Users are stored in a database
+configured via the `DATABASE_URL` environment variable (e.g.
+`postgresql://user:pass@localhost/dbname`).
 
 Run it separately:
 
@@ -46,6 +48,13 @@ Run it separately:
 python exemplo.py
 ```
 
-Login credentials default to `admin`/`password` but can be configured with the
-environment variables `APP_USER` and `APP_PASS`.  Set `SECRET_KEY` to control the
-Flask session secret.
+Set `SECRET_KEY` to control the Flask session secret. After setting
+`DATABASE_URL`, initialize the tables once:
+
+```bash
+python exemplo.py initdb
+```
+
+After that you can start the app normally and use `/register` to create new
+accounts.
+
