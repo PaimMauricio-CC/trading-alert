@@ -41,6 +41,7 @@ Use an [App Password](https://support.google.com/accounts/answer/185833) for `GM
 alerts saved in `alerts.json`. Credentials default to `admin`/`password` but can
 be configured with the environment variables `APP_USER` and `APP_PASS`.
 
+
 Run it separately:
 
 ```bash
@@ -52,4 +53,6 @@ Set `SECRET_KEY` to control the Flask session secret.
 This simplified member area has **no database dependency**. If you still see
 errors mentioning SQLAlchemy, ensure you are running the latest version of the
 files from this repository.
+
+
 

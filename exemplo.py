@@ -1,4 +1,8 @@
 from flask import Flask, request, redirect, render_template_string, session, url_for
+
+from models import db, User
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import os
 
@@ -67,6 +71,7 @@ ASSETS_TEMPLATE = """
   </div>
 </body>
 </html>
+
 """
 
 
@@ -76,13 +81,13 @@ def index():
         return redirect(url_for('assets'))
     return redirect(url_for('login'))
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if username == USER and password == PASSWORD:
+        user = User.query.filter_by(username=username).first()
+        if user and user.check_password(password):
             session['user'] = username
             return redirect(url_for('assets'))
         else:
