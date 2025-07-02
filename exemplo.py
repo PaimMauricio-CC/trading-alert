@@ -11,6 +11,10 @@ app.secret_key = os.getenv('SECRET_KEY', 'secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Simple credentials from env vars
+USER = os.getenv('APP_USER', 'admin')
+PASSWORD = os.getenv('APP_PASS', 'password')
+
 
 db.init_app(app)
 db = SQLAlchemy(app)
@@ -25,6 +29,8 @@ class User(db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+
+ALERT_FILE = os.path.join(os.path.dirname(__file__), 'alerts.json')
 
 ALERT_FILE = os.path.join(os.path.dirname(__file__), 'alerts.json')
 
@@ -53,9 +59,11 @@ LOGIN_TEMPLATE = """
               </div>
               <button class='btn btn-primary w-100' type='submit'>Login</button>
             </form>
+
             <div class='text-center mt-3'>
               <a href="{{ url_for('register') }}">Register</a>
             </div>
+
           </div>
         </div>
       </div>
@@ -87,6 +95,7 @@ ASSETS_TEMPLATE = """
   </div>
 </body>
 </html>
+
 """
 
 REGISTER_TEMPLATE = """
@@ -126,11 +135,13 @@ REGISTER_TEMPLATE = """
 </html>
 """
 
+
 @app.route('/')
 def index():
     if 'user' in session:
         return redirect(url_for('assets'))
     return redirect(url_for('login'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

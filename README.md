@@ -37,12 +37,18 @@ Use an [App Password](https://support.google.com/accounts/answer/185833) for `GM
 
 ### Member Area
 
+
+`exemplo.py` provides a small member area where you can log in and view the
+alerts saved in `alerts.json`. Credentials default to `admin`/`password` but can
+be configured with the environment variables `APP_USER` and `APP_PASS`.
+
 `exemplo.py` provides a small member area where you can register, log in and
 view the alerts saved in `alerts.json`.
 
 Set the `DATABASE_URL` environment variable with the connection string for your
 PostgreSQL database before running. Tables are created automatically on the
 first request.
+
 
 Run it separately:
 
@@ -51,6 +57,7 @@ python exemplo.py
 ```
 
 Set `SECRET_KEY` to control the Flask session secret.
+
 
 #### PostgreSQL Setup
 
